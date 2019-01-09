@@ -49,13 +49,16 @@ parfor i = 1:size(aal,2)
     
     % need to add values for min. t.dim and size in t.dim to fslroi
     % afterwards we will need fslmerge to produce a 4D nii
-    unix(['source ~/.bash_profile ;  fslmaths ' atlas_nii ' -thr ' aal(i).lt ' -uthr '  aal(i).ut ' ' atlas_dir_4D filesep 'aal_4D_' aal(i).name '.nii.gz '])
+    unix(['source ~/.bash_profile ;  fslmaths ' atlas_nii ' -thr ' aal(i).lt ' -uthr '  aal(i).ut ' -bin ' atlas_dir_4D filesep 'aal_4D_' aal(i).name '.nii.gz ']);
+    % If you want them smoothed just add a -s 2 or something.
     
 end
 
     aal_4D_nii = ([dir_main filesep 'aal_4D_complete.nii']);
-    
-    % The problem now is that merging them changes the order!!
+    new_order = sort({aal(:).name});
+    sort_aal = fopen([dir_main filesep 'aal_sorted.txt'] ,'w');
+    fprintf(sort_aal,'%s\n',new_order{:});
+    fclose(sort_aal);
     unix(['source ~/.bash_profile ; fslmerge -t ' aal_4D_nii ' ' atlas_dir_4D filesep '*aal_4D_*']); 
 
 
