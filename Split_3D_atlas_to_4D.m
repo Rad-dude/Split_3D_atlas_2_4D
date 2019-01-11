@@ -7,7 +7,7 @@
 clear all;
 clc
 
-dir_main = '/Volumes/LaCie/MTLE_HS/templates';
+dir_main = '/Users/aradwa0/MR-data/MTLE_HS/Atlas_split/';
 atlas_labels = [dir_main filesep 'aal_atlas.txt'];
 atlas_nii = [dir_main filesep 'aal_atlas.nii'];
 atlas_dir_4D = [dir_main filesep 'aal_4D'];
@@ -20,8 +20,8 @@ parpool(4);
 % this is only 1 column with the indices representing the image intensity of each
 % label
 
-labels = fopen('aal_atlas.txt');
-lwip = textscan(labels,'%d %s', 'delimiter','.');
+labels = fopen(atlas_labels);
+lwip = textscan(labels,'%d %s', 'delimiter', '.');
 fclose(labels);
 indices = lwip{1};
 names = lwip{2};

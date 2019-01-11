@@ -1,4 +1,4 @@
-function atlas_split_3to4D(path_to_atlas, labels_name_txt)
+function atlas_split_3to4D(path_and_atlas, labels_txt)
 
 
 %% Split any 3D atlas to 4D
@@ -6,17 +6,19 @@ function atlas_split_3to4D(path_to_atlas, labels_name_txt)
 % This little function is designed to work for the aal atlas splitting it
 % to 4D and gives you room to do some minor editing, e.g. smoothing,
 % dilation etc. with fslmaths
-
+% your atlas labels must be arranged as a single numbered column, using .
+% after the no. like so: 1. ACC (Anterior Cingulate Cortex)
+%                        2. PCC (Post...
 
 %% Part 1 Define some stuff
+% 
+% clear all;
+% clc
 
-clear all;
-clc
 
-
-[a b c ] = fileparts(path_to_atlas);
+[a b c ] = fileparts(path_and_atlas);
 dir_main = a;
-atlas_labels = [a filesep labels_name_txt];
+atlas_labels = [dir_main filesep labels_txt];
 atlas_nii = [dir_main filesep b c];
 atlas_dir_4D = [dir_main filesep b '_4D'];
 
@@ -28,9 +30,9 @@ parpool(4);
 % this is only 1 column with the indices representing the image intensity of each
 % label
 
-labels = fopen('aal_atlas.txt');
-lwip = textscan(labels,'%d %s', 'delimiter','.');
-fclose(labels);
+labels_f = fopen(atlas_labels);
+lwip = textscan(labels_f,'%d %s', 'delimiter', '.'); % this is to get an index of the vois... kinda redundant actually
+fclose(labels_f);
 indices = lwip{1};
 names = lwip{2};
 
